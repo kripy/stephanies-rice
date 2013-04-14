@@ -11,7 +11,29 @@ class App < Sinatra::Base
 	end
 
 	helpers do
+		def get_image()
+			start = rand(1 ..60)
+			position = rand(0..3)
+			puts 'start: ' + start.to_s() + ', position: ' + position.to_s()
 
+			search_url = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=rice&start=' + start.to_s() + '&imgsz=xxlarge&userip=' + request.ip
+			response = HTTParty.get(search_url)
+			parsed = JSON.parse(response.body)
+
+			data = parsed['responseData']['results'][position]['url']
+		end
+
+		def image_test(str_image)
+			response = HTTParty.get(str_image)
+			response = response.code
+		end
+
+		# Save image to disk.
+		#image_name = 'welcome_logo.gif'		
+		#@image_name = image_name
+		#open('public/img/' + image_name, 'wb') do |file|
+  		#	file << open('http://hartasandcraig.com.au/img/welcome_logo.gif').read
+		#end
 	end
 
 	# Function allows both get / post.
@@ -21,35 +43,14 @@ class App < Sinatra::Base
 	end		
 
 	get '/' do
-		# Save image to disk.
-		#image_name = 'welcome_logo.gif'		
-		#@image_name = image_name
-		#open('public/img/' + image_name, 'wb') do |file|
-  		#	file << open('http://hartasandcraig.com.au/img/welcome_logo.gif').read
-		#end
-
-		start = rand(1 ..60)
-		position = rand(0..3)
-		puts 'start: ' + start.to_s() + ', position: ' + position.to_s()
-
-		search_url = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=rice&start=' + start.to_s() + '&imgsz=xxlarge&userip=' + request.ip
-		response = HTTParty.get(search_url)
-		parsed = JSON.parse(response.body)
-		@image_name = parsed['responseData']['results'][position]['url']
-
+		#http://www.tylermcpeak.com/wp-content/uploads/Brown_rice.jpg
+		#@image_name = 'http://www.tylermcpeak.com/wp-content/uploads/Brown_rice.jpg'
+		@image_name = get_image()
 		erb :index
 	end
 
 	get '/about' do
-		start = rand(1 ..60)
-		position = rand(0..3)
-		puts 'start: ' + start.to_s() + ', position: ' + position.to_s()
-
-		search_url = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=rice&start=' + start.to_s() + '&imgsz=xxlarge&userip=' + request.ip
-		response = HTTParty.get(search_url)
-		parsed = JSON.parse(response.body)
-		@image_name = parsed['responseData']['results'][position]['url']
-
+		@image_name = get_image()
 		erb :about
 	end	
 end
