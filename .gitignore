@@ -5,7 +5,6 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 /public/img
-/public/favicon.ico
 
 # OS generated files #
 ######################
