@@ -89,6 +89,19 @@ img.bg {
     border: 1px solid #000;
 }
 
+#bent {
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+    width: 750px;
+    background-color: #fff;
+    margin-top: 25px;
+    padding: 25px;
+    font-size: 1em;
+    font-family: 'courier new', 'sans-serif';
+    border: 1px solid #000;
+}
+
 a {
     color: #000;
 }

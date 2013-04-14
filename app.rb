@@ -39,4 +39,17 @@ class App < Sinatra::Base
 
 		erb :index
 	end
+
+	get '/about' do
+		start = rand(1 ..60)
+		position = rand(0..3)
+		puts 'start: ' + start.to_s() + ', position: ' + position.to_s()
+
+		search_url = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=rice&start=' + start.to_s() + '&imgsz=xxlarge&userip=' + request.ip
+		response = HTTParty.get(search_url)
+		parsed = JSON.parse(response.body)
+		@image_name = parsed['responseData']['results'][position]['url']
+
+		erb :about
+	end	
 end
