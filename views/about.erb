@@ -1,43 +1,15 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Stephanie's Rice</title>
-        <link rel="stylesheet" href="css/normalise.css">
-        <link rel="stylesheet" href="css/main.css">
-        <script src="js/vendor/modernizr-2.6.1.min.js"></script>
-    </head>
-    <body>
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
-        <![endif]-->
+<%= erb :header %>
         <img class="bg" src="<%= @image_name %>" />
         <div id="bent">
             <strong>Why Not?</strong><br />I was looking for something to do and rice seemed like a good idea at the time.
             <br /><br /><strong>Notes</strong><br />The <a href="https://developers.google.com/image-search/">deprecated API</a> only returns four results per request for a maxiumum of 60 pages worth of results. This means a maximum of 240 images until the index is updated.
+            <br /><br /><strong>Tech</strong><br /><a href="http://www.sinatrarb.com/">Sinatra</a> on <a href="http://unicorn.bogomips.org">Unicorn</a> on <a href="http://www.heroku.com/">Heroku</a>.            
             <br /><br /><strong>The Future</strong><br />Upgrade to <a href="https://developers.google.com/custom-search/v1/overview">Custom Search API</a>.
             <br /><br /><strong>Versions</strong>
+            <br><strong>0.1.1: </strong>Unicorn; partials; dynamic title tags.
             <br><strong>0.1.0: </strong>Add Google Analytics.
             <br><strong>0.0.6: </strong>Get image moved to helper; ugly hack for images returning 403 errors.
             <br><strong>0.0.5: </strong>Base app; code UI; hit Google Image search; parse JSON; request and display image.
             <br /><br /><a href="/">Stephanie's Rice</a> 
         </div>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
-        <script src="js/plugins.js"></script>
-        <script src="js/main.js"></script>
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-          ga('create', 'UA-972694-18', 'stephaniesrice.com');
-          ga('send', 'pageview');
-        </script>        
-    </body>
-</html>
+<%= erb :footer %> 
