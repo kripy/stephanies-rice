@@ -44,8 +44,8 @@ class App < Sinatra::Base
 
 	get '/' do
 		#http://www.tylermcpeak.com/wp-content/uploads/Brown_rice.jpg
-		#@image_name = 'http://www.tylermcpeak.com/wp-content/uploads/Brown_rice.jpg'
-		@image_name = get_image()
+		@image_name = 'http://www.tylermcpeak.com/wp-content/uploads/Brown_rice.jpg'
+		#@image_name = get_image()
 		@title = 'Stephanie\'s Rice'
 		erb :index
 	end
