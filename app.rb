@@ -11,12 +11,12 @@ class App < Sinatra::Base
 	end
 
 	helpers do
-		def get_image()
+		def get_image(str_rice)
 			start = rand(1 ..60)
 			position = rand(0..3)
 			puts 'start: ' + start.to_s() + ', position: ' + position.to_s()
 
-			search_url = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=rice&start=' + start.to_s() + '&imgsz=xxlarge&userip=' + request.ip
+			search_url = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' + str_rice.gsub(' ', '+') + '&start=' + start.to_s() + '&imgsz=xxlarge&userip=' + request.ip
 			response = HTTParty.get(search_url)
 			parsed = JSON.parse(response.body)
 
@@ -42,16 +42,23 @@ class App < Sinatra::Base
 	  post(path, opts, &block)
 	end		
 
+	# Global Variables?
+	rice = %w( rice sushi fried\ rice risotto cute\ bento )
+
 	get '/' do
 		#http://www.tylermcpeak.com/wp-content/uploads/Brown_rice.jpg
 		#@image_name = 'http://www.tylermcpeak.com/wp-content/uploads/Brown_rice.jpg'
-		@image_name = get_image()
+		the_rice = rice.sample
+		@rice = the_rice
+		@image_name = get_image(the_rice)
 		@title = 'Stephanie\'s Rice'
 		erb :index
 	end
 
 	get '/about' do
-		@image_name = get_image()
+		the_rice = rice.sample
+		@rice = the_rice
+		@image_name = get_image(the_rice)
 		@title = 'About Stephanie\'s Rice'
 		erb :about
 	end	
