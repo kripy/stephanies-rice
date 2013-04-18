@@ -46,8 +46,6 @@ class App < Sinatra::Base
 	rice = %w( rice sushi fried\ rice risotto cute\ bento )
 
 	get '/' do
-		#http://www.tylermcpeak.com/wp-content/uploads/Brown_rice.jpg
-		#@image_name = 'http://www.tylermcpeak.com/wp-content/uploads/Brown_rice.jpg'
 		the_rice = rice.sample
 		@rice = the_rice
 		@image_name = get_image(the_rice)
