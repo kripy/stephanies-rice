@@ -10,6 +10,10 @@ class App < Sinatra::Base
 		set :root, File.dirname(__FILE__)
 	end
 
+	configure :production do
+	  require 'newrelic_rpm'
+	end
+
 	helpers do
 		def get_image(str_rice)
 			start = rand(1 ..60)
@@ -43,7 +47,7 @@ class App < Sinatra::Base
 	end		
 
 	# Global Variables?
-	rice = %w( rice sushi fried\ rice risotto cute\ bento )
+	rice = %w( rice sushi fried\ rice risotto cute\ bento paella )
 
 	get '/' do
 		the_rice = rice.sample
