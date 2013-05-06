@@ -1,9 +1,17 @@
 require 'sinatra/base'
+require 'mustache/sinatra'
 require 'open-uri'
 require 'json'
 require 'httparty'
 
 class App < Sinatra::Base
+	register Mustache::Sinatra
+	require './views/layout'
+
+	set :mustache, {
+	:views     => './views/',
+	:templates => './templates/'
+	}
 
 	configure do
 		# Odd but true. Set up /public folder.
@@ -24,12 +32,8 @@ class App < Sinatra::Base
 			response = HTTParty.get(search_url)
 			parsed = JSON.parse(response.body)
 
-			data = parsed['responseData']['results'][position]['url']
-		end
-
-		def image_test(str_image)
-			response = HTTParty.get(str_image)
-			response = response.code
+			# This is probably a pretty dodgy thing to do.
+			data = [parsed['responseData']['results'][position]['url'], parsed['responseData']['results'][position]['originalContextUrl']]
 		end
 
 		# Save image to disk.
@@ -52,16 +56,20 @@ class App < Sinatra::Base
 	get '/' do
 		the_rice = rice.sample
 		@rice = the_rice
-		@image_name = get_image(the_rice)
+		@image_name, @image_link = get_image(the_rice)
 		@title = 'Stephanie\'s Rice'
-		erb :index
+		
+		mustache :index
+		#erb :index
 	end
 
 	get '/about' do
 		the_rice = rice.sample
 		@rice = the_rice
-		@image_name = get_image(the_rice)
+		@image_name, @image_link = get_image(the_rice)
 		@title = 'About Stephanie\'s Rice'
-		erb :about
+
+		mustache :about
+		#erb :about
 	end	
 end
