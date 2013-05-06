@@ -57,7 +57,7 @@ class App < Sinatra::Base
 		the_rice = rice.sample
 		@rice = the_rice
 		@image_name, @image_link = get_image(the_rice)
-		@title = 'Stephanie\'s Rice'
+		@page_title = 'Stephanie\'s Rice'
 		
 		mustache :index
 		#erb :index
@@ -67,7 +67,7 @@ class App < Sinatra::Base
 		the_rice = rice.sample
 		@rice = the_rice
 		@image_name, @image_link = get_image(the_rice)
-		@title = 'About Stephanie\'s Rice'
+		@page_title = 'About Stephanie\'s Rice'
 
 		mustache :about
 		#erb :about
