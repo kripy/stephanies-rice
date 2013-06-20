@@ -47,39 +47,46 @@ class App < Sinatra::Base
 
 		def get_image_new(str_rice)
 			# Get results from Mongo.
-			#the_result = JSON.parse(%{Term.get_search_result('#{str_rice}').to_json})
-			#the_result = JSON.parse(%{Term.get_search_result('str').to_json})
-			
-			the_result = JSON.parse(Term.get_search_result('rice').to_json)
-			puts the_result[0]['result']
+			# Turns out the Google Search API only returns around 91 pages.
+			#the_result = JSON.parse(Term.get_search_result(str_rice).to_json)
+			#start = the_result[0]['result'].to_i / 10
 
 			# Get start / position.
-			#start = rand(1 ..60)
-			#position = rand(0..3)
-			
+			start = rand(1 ..91)
+			position = rand(0..10)
+
 			# Pull results.
-			#search_url = "https://www.googleapis.com/customsearch/v1?"
-			#search_url << "key=AIzaSyAXFS8cZOLCUOvwRiGudDOSjPv3rc1dmcw&cx=001106702494312142376:5_pgyrj_apm"
-			#search_url << %{&q=#{str_rice.gsub(" ", "+")}&imgSize=xxlarge&searchType=image&alt=json}
-			
+			search_url = "https://www.googleapis.com/customsearch/v1?"
+			search_url << "key=AIzaSyAXFS8cZOLCUOvwRiGudDOSjPv3rc1dmcw&cx=001106702494312142376:5_pgyrj_apm"
+			search_url << %{&q=#{str_rice.gsub(" ", "+")}&imgSize=xxlarge&searchType=image&start=#{start.to_s()}&alt=json}
+
 			# Same as.
-			#response = HTTParty.get(search_url)
-			#parsed = JSON.parse(response.body)
+			response = HTTParty.get(search_url)
+			parsed = JSON.parse(response.body)
+
+			#puts parsed["items"][0]["title"]
+			#puts parsed["items"][0]["link"]
+			#puts parsed["items"][0]["image"]["contextLink"]
 
 			# This is probably a pretty dodgy thing to do.
-			#data = [parsed["responseData"]["results"][position]["url"], parsed["responseData"]["results"][position]["originalContextUrl"]]
+			data = [parsed["items"][0]["link"], parsed["items"][0]["image"]["contextLink"]]
 		end		
 
 		def set_search_result(str_rice)
 			search_url = "https://www.googleapis.com/customsearch/v1?"
 			search_url << "key=AIzaSyAXFS8cZOLCUOvwRiGudDOSjPv3rc1dmcw&cx=001106702494312142376:5_pgyrj_apm"
 			search_url << %{&q=#{str_rice.gsub(" ", "+")}&imgSize=xxlarge&searchType=image&alt=json}						
-			
+
+			puts search_url
+
 			response = HTTParty.get(search_url)
 			parsed = JSON.parse(response.body)    
+
+			puts parsed
+
 			result = parsed['searchInformation']['totalResults']
 
-			Term.update(str_rice, result)
+			#Term.update(str_rice, result)
 		end
 
 		# Save image to disk.
@@ -126,5 +133,6 @@ class App < Sinatra::Base
 	get '/run' do
 		the_rice = rice.sample
 		get_image_new(the_rice)
+		#set_search_result(the_rice)
 	end	
 end
