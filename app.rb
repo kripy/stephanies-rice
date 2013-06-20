@@ -60,41 +60,26 @@ class App < Sinatra::Base
 			search_url << "key=AIzaSyAXFS8cZOLCUOvwRiGudDOSjPv3rc1dmcw&cx=001106702494312142376:5_pgyrj_apm"
 			search_url << %{&q=#{str_rice.gsub(" ", "+")}&imgSize=xxlarge&searchType=image&start=#{start.to_s()}&alt=json}
 
-			# Same as.
 			response = HTTParty.get(search_url)
 			parsed = JSON.parse(response.body)
 
-			#puts parsed["items"][0]["title"]
-			#puts parsed["items"][0]["link"]
-			#puts parsed["items"][0]["image"]["contextLink"]
-
-			# This is probably a pretty dodgy thing to do.
 			data = [parsed["items"][0]["link"], parsed["items"][0]["image"]["contextLink"]]
 		end		
 
 		def set_search_result(str_rice)
+			# Get search results count and store it.
+			# Not requires as GCS only returns 91 pages of searches.
 			search_url = "https://www.googleapis.com/customsearch/v1?"
 			search_url << "key=AIzaSyAXFS8cZOLCUOvwRiGudDOSjPv3rc1dmcw&cx=001106702494312142376:5_pgyrj_apm"
 			search_url << %{&q=#{str_rice.gsub(" ", "+")}&imgSize=xxlarge&searchType=image&alt=json}						
 
-			puts search_url
-
 			response = HTTParty.get(search_url)
 			parsed = JSON.parse(response.body)    
-
-			puts parsed
-
 			result = parsed['searchInformation']['totalResults']
 
-			#Term.update(str_rice, result)
+			# Save to Mongo.
+			Term.update(str_rice, result)
 		end
-
-		# Save image to disk.
-		#image_name = 'welcome_logo.gif'		
-		#@image_name = image_name
-		#open('public/img/' + image_name, 'wb') do |file|
-  		#	file << open('http://hartasandcraig.com.au/img/welcome_logo.gif').read
-		#end
 	end
 
 	# Function allows both get / post.
@@ -109,7 +94,7 @@ class App < Sinatra::Base
 	get '/' do
 		the_rice = rice.sample
 		@rice = the_rice
-		@image_name, @image_link = get_image(the_rice)
+		@image_name, @image_link = get_image_new(the_rice)
 		@page_title = 'Stephanie\'s Rice'
 		
 		mustache :index
@@ -118,7 +103,7 @@ class App < Sinatra::Base
 	get '/about' do
 		the_rice = rice.sample
 		@rice = the_rice
-		@image_name, @image_link = get_image(the_rice)
+		@image_name, @image_link = get_image_new(the_rice)
 		@page_title = 'About Stephanie\'s Rice'
 
 		mustache :about
@@ -131,8 +116,9 @@ class App < Sinatra::Base
 	end
 
 	get '/run' do
-		the_rice = rice.sample
-		get_image_new(the_rice)
+		# Used to test functions.
+		#the_rice = rice.sample
+		#get_image_new(the_rice)
 		#set_search_result(the_rice)
 	end	
 end

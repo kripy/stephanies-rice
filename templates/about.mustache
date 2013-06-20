@@ -1,10 +1,11 @@
 <img id="snacks" class="bg" src="{{image_name}}" onerror="imgError(this);" />
 <div id="bent">
     <strong>Why Not?</strong><br />I was looking for something to do and rice seemed like a good idea at the time.
-    <br /><br /><strong>Notes</strong><br />The <a href="https://developers.google.com/image-search/">deprecated API</a> only returns four results per request for a maxiumum of 60 pages worth of results. This means a maximum of 240 images until the index is updated.
+    <br /><br /><strong>Notes</strong><br />The <a href="https://developers.google.com/image-search/">deprecated API</a> only returns four results per request for a maxiumum of 60 pages worth of results. This means a maximum of 240 images until the index is updated. Turns out the <a href="https://developers.google.com/custom-search/v1/overview">Google Custom Search API</a> only returns 91 pages of results at ten results per page. I guess 910 is better than 240.
     <br /><br /><strong>Tech</strong><br /><a href="http://www.sinatrarb.com/">Sinatra</a> on <a href="http://unicorn.bogomips.org">Unicorn</a> on <a href="http://www.heroku.com/">Heroku</a>.            
-    <br /><br /><strong>The Future</strong><br />Upgrade to <a href="https://developers.google.com/custom-search/v1/overview">Custom Search API</a>.
+    <br /><br /><strong>The Future</strong><br />Rate limited to 100 requests per day so I'll need to fix that. And more tasty rice snacks.
     <br /><br /><strong>Versions</strong>
+    <br><strong>0.3.0: </strong>Upgraded to Google Custom Search API; MongoDB ready to store records.
     <br><strong>0.2.0: </strong>Templates into <a href="http://mustache.github.io/">Mustache</a>; link to recipe.
     <br><strong>0.1.2: </strong>Array of random rice dishes; sitemap.
     <br><strong>0.1.1: </strong>Unicorn; partials; dynamic title tags.
