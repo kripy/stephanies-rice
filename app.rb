@@ -1,39 +1,85 @@
-require 'sinatra/base'
-require 'mustache/sinatra'
-require 'open-uri'
-require 'json'
-require 'httparty'
+require "sinatra/base"
+require "mustache/sinatra"
+require "open-uri"
+require "json"
+require "httparty"
+require 'mongoid'
+require 'mongo'
+require 'bson'
+
+require './lib/term'
 
 class App < Sinatra::Base
 	register Mustache::Sinatra
-	require './views/layout'
+	require "./views/layout"
 
 	set :mustache, {
-	:views     => './views/',
-	:templates => './templates/'
+		:views     => "./views/",
+		:templates => "./templates/"
 	}
 
 	configure do
+		# Database setup.
+		Mongoid.load!("config/mongoid.yml")
+
 		# Odd but true. Set up /public folder.
 		set :root, File.dirname(__FILE__)
 	end
 
 	configure :production do
-	  require 'newrelic_rpm'
+	  require "newrelic_rpm"
 	end
 
 	helpers do
 		def get_image(str_rice)
 			start = rand(1 ..60)
 			position = rand(0..3)
-			puts 'start: ' + start.to_s() + ', position: ' + position.to_s()
-
-			search_url = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' + str_rice.gsub(' ', '+') + '&start=' + start.to_s() + '&imgsz=xxlarge&userip=' + request.ip
+			search_url = %{https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=}
+			search_url << %{#{str_rice.gsub(" ", "+")}&start=#{start.to_s()}&imgsz=xxlarge&userip=#{request.ip}}
 			response = HTTParty.get(search_url)
 			parsed = JSON.parse(response.body)
 
+			puts parsed
+
 			# This is probably a pretty dodgy thing to do.
-			data = [parsed['responseData']['results'][position]['url'], parsed['responseData']['results'][position]['originalContextUrl']]
+			data = [parsed["responseData"]["results"][position]["url"], parsed["responseData"]["results"][position]["originalContextUrl"]]
+		end
+
+		def get_image_new(str_rice)
+			# Get results from Mongo.
+			#the_result = JSON.parse(%{Term.get_search_result('#{str_rice}').to_json})
+			#the_result = JSON.parse(%{Term.get_search_result('str').to_json})
+			
+			the_result = JSON.parse(Term.get_search_result('rice').to_json)
+			puts the_result[0]['result']
+
+			# Get start / position.
+			#start = rand(1 ..60)
+			#position = rand(0..3)
+			
+			# Pull results.
+			#search_url = "https://www.googleapis.com/customsearch/v1?"
+			#search_url << "key=AIzaSyAXFS8cZOLCUOvwRiGudDOSjPv3rc1dmcw&cx=001106702494312142376:5_pgyrj_apm"
+			#search_url << %{&q=#{str_rice.gsub(" ", "+")}&imgSize=xxlarge&searchType=image&alt=json}
+			
+			# Same as.
+			#response = HTTParty.get(search_url)
+			#parsed = JSON.parse(response.body)
+
+			# This is probably a pretty dodgy thing to do.
+			#data = [parsed["responseData"]["results"][position]["url"], parsed["responseData"]["results"][position]["originalContextUrl"]]
+		end		
+
+		def set_search_result(str_rice)
+			search_url = "https://www.googleapis.com/customsearch/v1?"
+			search_url << "key=AIzaSyAXFS8cZOLCUOvwRiGudDOSjPv3rc1dmcw&cx=001106702494312142376:5_pgyrj_apm"
+			search_url << %{&q=#{str_rice.gsub(" ", "+")}&imgSize=xxlarge&searchType=image&alt=json}						
+			
+			response = HTTParty.get(search_url)
+			parsed = JSON.parse(response.body)    
+			result = parsed['searchInformation']['totalResults']
+
+			Term.update(str_rice, result)
 		end
 
 		# Save image to disk.
@@ -60,7 +106,6 @@ class App < Sinatra::Base
 		@page_title = 'Stephanie\'s Rice'
 		
 		mustache :index
-		#erb :index
 	end
 
 	get '/about' do
@@ -70,6 +115,16 @@ class App < Sinatra::Base
 		@page_title = 'About Stephanie\'s Rice'
 
 		mustache :about
-		#erb :about
+	end	
+
+	get '/load' do
+		# Flust the collection as we're updating all of them.
+		Term.flush
+		rice.each { |x| set_search_result(x) }
+	end
+
+	get '/run' do
+		the_rice = rice.sample
+		get_image_new(the_rice)
 	end	
 end
