@@ -39,8 +39,6 @@ class App < Sinatra::Base
 			response = HTTParty.get(search_url)
 			parsed = JSON.parse(response.body)
 
-			puts parsed
-
 			# This is probably a pretty dodgy thing to do.
 			data = [parsed["responseData"]["results"][position]["url"], parsed["responseData"]["results"][position]["originalContextUrl"]]
 		end
@@ -63,7 +61,14 @@ class App < Sinatra::Base
 			response = HTTParty.get(search_url)
 			parsed = JSON.parse(response.body)
 
-			data = [parsed["items"][0]["link"], parsed["items"][0]["image"]["contextLink"]]
+			# Need to test this once the rate limit is removed.
+			# Could be a hack job.
+			if parsed.length == 1
+				# Have been rate limited.
+				data = [parsed[""], parsed[""]]
+			else
+				data = [parsed["items"][0]["link"], parsed["items"][0]["image"]["contextLink"]]
+			end	
 		end		
 
 		def set_search_result(str_rice)
