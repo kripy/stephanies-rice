@@ -72,7 +72,7 @@ class App < Sinatra::Base
 				data = [parsed[""], parsed[""]]
 			else
 				# Save it.
-				#Rice.add_rice(parsed["items"][position]["link"], parsed["items"][position]["image"]["contextLink"])
+				Rice.add_rice(parsed["items"][position]["link"], parsed["items"][position]["image"]["contextLink"])
 				data = [parsed["items"][position]["link"], parsed["items"][position]["image"]["contextLink"]]
 			end	
 		end		
