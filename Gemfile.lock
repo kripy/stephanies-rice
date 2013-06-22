@@ -53,7 +53,7 @@ DEPENDENCIES
   httparty
   json
   mongo
-  mongoid (~> 3.0)
+  mongoid (= 3.1.4)
   mustache
   newrelic_rpm
   sinatra

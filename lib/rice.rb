@@ -1,13 +1,10 @@
 class Rice
 	include Mongoid::Document
 	
-	field :message, 		:type => String
+	field :image_url,	:type => String
+	field :url,	:type => String
 
-
-	def self.add_rice(str_image, str_link)
-		e = Entry.new
-		e.image = str_image
-		e.link = str_link
-		e.save
+	def self.add_rice(str_image_url, str_url)
+		Rice.where(image_url: str_image_url, url: str_url).first_or_create
 	end
 end

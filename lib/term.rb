@@ -4,11 +4,9 @@ class Term
 	field :term,	:type => String
 	field :result,	:type => Integer
 
-	def self.update(the_term, the_result)
-		e = Term.new
-		e.term = the_term
-		e.result = the_result
-		e.save
+	def self.update(str_term, str_result)
+		#Rice.where(image_url: str_image_url, url: str_url).first_or_create
+		Term.where(term: str_term, result: str_result).first_or_create
 	end
 
 	def self.flush()

@@ -52,14 +52,15 @@ class App < Sinatra::Base
 
 			# Get start / position.
 			start = rand(1 ..91)
-			position = rand(0..10)
+			position = rand(0..9)
 
 			# Pull results.
 			search_url = "https://www.googleapis.com/customsearch/v1?"
 			search_url << "key=AIzaSyAXFS8cZOLCUOvwRiGudDOSjPv3rc1dmcw&cx=001106702494312142376:5_pgyrj_apm"
 			search_url << %{&q=#{str_rice.gsub(" ", "+")}&imgSize=xxlarge&searchType=image&start=#{start.to_s()}&alt=json}
 
-			puts search_url
+			# Used to test locally and not smash the rate limit.
+			#search_url = "http://localhost:5000/result.json"
 
 			response = HTTParty.get(search_url)
 			parsed = JSON.parse(response.body)
@@ -70,10 +71,9 @@ class App < Sinatra::Base
 				# Have been rate limited.
 				data = [parsed[""], parsed[""]]
 			else
-				data = [parsed["items"][0]["link"], parsed["items"][0]["image"]["contextLink"]]
-
-
-
+				# Save it.
+				Rice.add_rice(parsed["items"][position]["link"], parsed["items"][position]["image"]["contextLink"])
+				data = [parsed["items"][position]["link"], parsed["items"][position]["image"]["contextLink"]]
 			end	
 		end		
 
@@ -90,6 +90,10 @@ class App < Sinatra::Base
 
 			# Save to Mongo.
 			Term.update(str_rice, result)
+		end
+
+		def set_image(str_image_url, str_url)
+			Rice.add_rice(str_image_url, str_url)
 		end
 	end
 
@@ -128,8 +132,10 @@ class App < Sinatra::Base
 
 	get '/run' do
 		# Used to test functions.
+
 		#the_rice = rice.sample
 		#get_image_new(the_rice)
 		#set_search_result(the_rice)
+		set_image("http://eofdreams.com/data_images/dreams/rice/rice-06.jpg", "http://eofdreams.com/rice.html")
 	end	
 end
