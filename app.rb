@@ -8,6 +8,7 @@ require 'mongo'
 require 'bson'
 
 require './lib/term'
+require './lib/rice'
 
 class App < Sinatra::Base
 	register Mustache::Sinatra
@@ -58,6 +59,8 @@ class App < Sinatra::Base
 			search_url << "key=AIzaSyAXFS8cZOLCUOvwRiGudDOSjPv3rc1dmcw&cx=001106702494312142376:5_pgyrj_apm"
 			search_url << %{&q=#{str_rice.gsub(" ", "+")}&imgSize=xxlarge&searchType=image&start=#{start.to_s()}&alt=json}
 
+			puts search_url
+
 			response = HTTParty.get(search_url)
 			parsed = JSON.parse(response.body)
 
@@ -68,6 +71,9 @@ class App < Sinatra::Base
 				data = [parsed[""], parsed[""]]
 			else
 				data = [parsed["items"][0]["link"], parsed["items"][0]["image"]["contextLink"]]
+
+
+
 			end	
 		end		
 
