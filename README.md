@@ -2,7 +2,7 @@
 
 I couldn't be bothered documenting this one. Sue me.
 
-Thing is I wanted to share the code as it's a good start for:
+Thing is I wanted to share the code for [Stephanie's Rice](http://www.stephaniesrice.com/) as it's a good start for:
 
 - A Sinatra based web app.
 - Hitting an API, in this case the Google Search API, returning JSON, and parsing the results.
