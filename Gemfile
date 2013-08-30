@@ -1,9 +1,16 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-ruby '1.9.3'
-gem 'sinatra'
-gem 'mustache'
-gem 'unicorn'
+ruby "1.9.3"
+gem "unicorn"
+gem "sinatra"
+gem "sinatra-support", require: "sinatra/support"
+gem "sinatra-assetpack", :require => "sinatra/assetpack"
+
+gem "coffee-script"
+gem "compass"
+gem "compass-h5bp"
+gem "mustache"
+
 gem 'json'
 gem 'httparty'
 gem 'newrelic_rpm'

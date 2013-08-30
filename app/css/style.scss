@@ -1,0 +1,54 @@
+@import "h5bp";
+@include h5bp-normalize;
+@include h5bp-base-styles;
+@include h5bp-chromeframe;
+
+//Start custom styles.
+img.bg {
+    /* Set rules to fill background */
+    min-height: 100%;
+    min-width: 1024px;
+
+    /* Set up proportionate scaling */
+    width: 100%;
+    height: auto;
+
+    /* Set up positioning */
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#fence {
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+    width: 300px;
+    background-color: #fff;
+    margin-top: 25px;
+    padding: 25px;
+    font-size: 1em;
+    font-family: 'courier new', 'sans-serif';
+    text-align: center;
+    border: 1px solid #000;
+}
+
+#bent {
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+    width: 810px;
+    background-color: #fff;
+    margin-top: 25px;
+    padding: 25px;
+    font-size: 1em;
+    font-family: 'courier new', 'sans-serif';
+    border: 1px solid #000;
+}
+
+a {
+    color: #000;
+}
+
+@include h5bp-helpers;
+@include h5bp-media;

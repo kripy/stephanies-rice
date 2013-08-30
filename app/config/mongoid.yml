@@ -1,0 +1,33 @@
+development: &defaults
+  # Configure available database sessions. (required)
+  sessions:
+    # Defines the default session. (required)
+    default: &default_session
+      # Defines the name of the default database that Mongoid can connect to.
+      # (required).
+      database: dev_stephanies_rice
+      # Provides the hosts the default session can connect to. Must be an array
+      # of host:port pairs. (required)
+      hosts:
+        - localhost:27017
+      options:
+
+  # Configure Mongoid specific options. (optional)
+  options:
+    preload_models: true
+    raise_not_found_error: false
+
+test:
+  <<: *defaults
+  sessions:
+    default:
+      <<: *default_session
+      database: test_stephanies_rice
+
+production:
+  sessions:
+    default:
+      uri: <%= ENV['MONGOHQ_URL'] %>
+      options:
+        skip_version_check: true
+        safe: true
