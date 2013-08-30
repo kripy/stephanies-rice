@@ -60,6 +60,10 @@ class App < Sinatra::Base
     # Odd but true. Set up /public folder.
     set :root, File.dirname(__FILE__)
   end
+  
+  configure :production do
+    require 'newrelic_rpm'
+  end
 
   helpers do
     def get_image(str_rice)
