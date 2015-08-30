@@ -1,16 +1,16 @@
-require 'sinatra/base'
-require 'sinatra/assetpack'
-require 'compass'
-require 'compass-h5bp'
-require 'sinatra/support'
-require 'mustache/sinatra'
+require "sinatra/base"
+require "sinatra/assetpack"
+require "compass"
+require "compass-h5bp"
+require "sinatra/support"
+require "mustache/sinatra"
 
 require "open-uri"
 require "json"
 require "httparty"
-require 'mongoid'
-require 'mongo'
-require 'bson'
+require "mongoid"
+require "mongo"
+require "bson"
 
 require './app/lib/rice'
 
@@ -60,7 +60,7 @@ class App < Sinatra::Base
     # Odd but true. Set up /public folder.
     set :root, File.dirname(__FILE__)
   end
-  
+
   configure :production do
     require 'newrelic_rpm'
   end
@@ -116,7 +116,7 @@ class App < Sinatra::Base
     @rice = the_rice
     @image_name, @image_link, @rate_limit = get_image(the_rice)
     @page_title = 'Stephanie\'s Rice'
-    
+
     mustache :index
   end
 
